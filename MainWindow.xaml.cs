@@ -21,36 +21,60 @@ namespace SpeedTester
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		private readonly string testRichTextBoxText = "The the quick brown fox jumps over the lazy dog";
+		private string[] words;
 		private string currentWord = "";
-		Paragraph paragraph;
+		private int currentIndex = 0;
 		public MainWindow()
 		{
 			InitializeComponent();
-			paragraph = new Paragraph();
+			Init();
 			type.Focus();
-			UpdateRichTextBox();
-			//UpdateRichTextBox(paragraph);
+		}
+
+		private void Init()
+		{
+			Paragraph paragraph = new Paragraph();
+			testRichTextBox.Document = new FlowDocument(paragraph);
+			paragraph.Inlines.Add(testRichTextBoxText);
+			words = testRichTextBoxText.Split(' ');
+			currentWord = words.First();
 		}
 
 		private string GetNextWord()
 		{
-			string str = getStringFromRichTextBox(testRichTextBox);
-			int startIndex = str.IndexOf(currentWord);
+			Debug.WriteLine("Current word: " + currentWord);
+			string str = testRichTextBoxText;
+			int startIndex = str.IndexOf(currentWord, currentIndex);
 			int endIndex = str.IndexOf(" ", startIndex);
-			return str.Substring(startIndex, endIndex - startIndex);
+			startIndex = endIndex + 1;
+			endIndex = str.IndexOf(" ", endIndex + 1);
+			currentIndex = startIndex - 1;
+			//if (startIndex < currentIndex)
+			//{
+			//	Debug.WriteLine("Repetitive word found");
+			//	startIndex = str.IndexOf(currentWord, startIndex);
+			//	endIndex = str.IndexOf(" ", endIndex);
+			//	currentIndex = endIndex;
+			//}
+			//else
+			//{
+			//	currentIndex = endIndex;
+			//}
+			Debug.WriteLine("Length of currentWord: " + (endIndex - startIndex));
+			try
+			{
+				return str.Substring(startIndex, endIndex - startIndex);
+			}
+			catch (Exception e)
+			{
+				return str.Split(' ').Last();
+			}
 		}
 
-		private void UpdateRichTextBox(Paragraph paragraph)
+		private void UpdateRichTextBox(string text)
 		{
-
-		}
-
-		private void UpdateRichTextBox()
-		{
-			Paragraph paragraph = new Paragraph();
-			testRichTextBox.Document = new FlowDocument(paragraph);
-			paragraph.Inlines.Add("The quick brown fox jumps over the lazy dog");
-			currentWord = "The";
+			//Highlight the entire word and color the specific portion of word
 		}
 
 		private string getStringFromRichTextBox(RichTextBox richTextBox)
@@ -65,15 +89,38 @@ namespace SpeedTester
 			string text = textBox.Text;
 			if (text.EndsWith(" "))
 			{
-				Debug.WriteLine("Clearing");
-				textBox.Text = "";
-				currentWord = GetNextWord();
+				Debug.WriteLine("Space bar pressed");
+				// To remove space from text
+				string actualText = text.TrimEnd(' ');
+				if (actualText == currentWord)
+				{
+					Debug.WriteLine("Clearing");
+					textBox.Text = string.Empty;
+					UpdateCurrentWord();
+					Debug.WriteLine("Next current word: " + currentWord);
+				}
 			}
 
 			if (currentWord.Contains(text))
 			{
-				Debug.WriteLine("Partial text found, call UpdateRichTextBox");
+				//Debug.WriteLine("Partial text found, call UpdateRichTextBox");
+				//UpdateRichTextBox(text);
 			}
+		}
+
+		private void UpdateCurrentWord()
+		{
+			Debug.WriteLine("Current word: " + currentWord);
+
+			if (currentIndex >= words.Length - 1)
+			{
+				MessageBox.Show("Typing test over!");
+				currentIndex = -1;
+			}
+
+			currentWord = words[currentIndex + 1];
+			currentIndex++;
+			
 		}
 	}
 }
