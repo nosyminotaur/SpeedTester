@@ -8,8 +8,8 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <StackPanel Orientation= "Vertical">
-            <RichTextBox Name="testRichTextBox"/>
-            <TextBox Name="type" TextChanged="type_TextChanged"/>
+            <RichTextBox Name="testRichTextBox" FontSize="20"/>
+            <TextBox Name="type" TextChanged="type_TextChanged" FontSize="20"/>
         </StackPanel>
     </Grid>
 </Window>

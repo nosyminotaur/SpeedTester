@@ -21,15 +21,15 @@ namespace SpeedTester
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private readonly string testRichTextBoxText = "The the quick brown fox jumps over the lazy dog";
+		private readonly string testRichTextBoxText = "The quick brown fox jumps over the lazy dog";
 		private string[] words;
 		private string currentWord = "";
 		private int currentIndex = 0;
 		public MainWindow()
 		{
 			InitializeComponent();
-			Init();
 			type.Focus();
+			Init();
 		}
 
 		private void Init()
@@ -75,6 +75,52 @@ namespace SpeedTester
 		private void UpdateRichTextBox(string text)
 		{
 			//Highlight the entire word and color the specific portion of word
+			FlowDocument flowDocument = new FlowDocument();
+			Paragraph pr = new Paragraph();
+
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < currentIndex; i++)
+			{
+				sb.Append(words[i]);
+				sb.Append(" ");
+			}
+
+			Debug.WriteLine(sb.ToString());
+			
+			Run run = new Run(sb.ToString());
+			pr.Inlines.Add(run);
+
+			int length = text.Length;
+			run = new Run(words[currentIndex].Substring(0, length));
+			run.Foreground = new SolidColorBrush(Colors.Red);
+			run.FontStyle = FontStyles.Italic;
+
+			pr.Inlines.Add(run);
+			int length2 = words[currentIndex].Length;
+			run = new Run(words[currentIndex].Substring(length, length2 - length) + " ");
+			run.FontStyle = FontStyles.Italic;
+			pr.Inlines.Add(run);
+
+			//run = new Run(words[currentIndex] + " ");
+			//run.Foreground = new SolidColorBrush(Colors.Red);
+			//run.FontStyle = FontStyles.Italic;
+			//pr.Inlines.Add(run);
+			sb.Clear();
+
+			for (int i = currentIndex + 1; i < words.Length; i++)
+			{
+				sb.Append(words[i]);
+				sb.Append(" ");
+			}
+
+			Debug.WriteLine(sb.ToString());
+
+			run = new Run(sb.ToString());
+			pr.Inlines.Add(run);
+
+			flowDocument.Blocks.Add(pr);
+			testRichTextBox.Document = flowDocument;
+
 		}
 
 		private string getStringFromRichTextBox(RichTextBox richTextBox)
@@ -104,7 +150,7 @@ namespace SpeedTester
 			if (currentWord.Contains(text))
 			{
 				//Debug.WriteLine("Partial text found, call UpdateRichTextBox");
-				//UpdateRichTextBox(text);
+				UpdateRichTextBox(text);
 			}
 		}
 
