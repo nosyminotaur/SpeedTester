@@ -39,6 +39,7 @@ namespace SpeedTester
 		{
 			typeTextBox.IsReadOnly = false;
 			Init();
+			typeTextBox.IsEnabled = true;
 			typeTextBox.Focus();
 			StartButton.IsEnabled = false;
 		}
@@ -202,11 +203,19 @@ namespace SpeedTester
 		{
 			dispatcherTimer.Stop();
 			dispatcherTimer.Tick -= DispatcherTimer_Tick;
-			double typingSpeed = words.Length * 60 / secondsElapsed;
+			double typingSpeed = currentIndex * 60 / secondsElapsed;
 			MessageBox.Show("Typing test over, your speed is: " + typingSpeed + " wpm", "Test over!");
 			currentIndex = -1;
 			StartButton.IsEnabled = true;
 			typeTextBox.IsEnabled = false;
+			typeTextBox.IsReadOnly = true;
+		}
+
+		private void StopButton_Click(object sender, RoutedEventArgs e)
+		{
+			Stop();
+			currentWord = words[currentIndex + 1];
+			currentIndex++;
 		}
 	}
 }

@@ -13,6 +13,9 @@
             <Button Name="StartButton" Margin="50" Width="150" Click="StartButton_Click" FontSize="20">
                 Start the Test!
             </Button>
+            <Button Name="StopButton" Margin="10" Width="150" Click="StopButton_Click" FontSize="20">
+                Stop the Test!
+            </Button>
             <Label Name="TimerLabel" FontSize="20">
                 00:00:00
             </Label>
