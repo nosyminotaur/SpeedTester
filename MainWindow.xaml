@@ -8,8 +8,14 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <StackPanel Orientation= "Vertical">
-            <RichTextBox Name="testRichTextBox" FontSize="20"/>
-            <TextBox Name="type" TextChanged="type_TextChanged" FontSize="20"/>
+            <RichTextBox Name="testRichTextBox" FontSize="20" Margin="10 10 10 10"/>
+            <TextBox Name="typeTextBox" TextChanged="type_TextChanged" FontSize="20" Margin="10 10 10 10"/>
+            <Button Name="StartButton" Margin="50" Width="150" Click="StartButton_Click" FontSize="20">
+                Start the Test!
+            </Button>
+            <Label Name="TimerLabel" FontSize="20">
+                00:00:00
+            </Label>
         </StackPanel>
     </Grid>
 </Window>

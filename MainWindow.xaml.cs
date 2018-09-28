@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace SpeedTester
 {
@@ -21,15 +22,25 @@ namespace SpeedTester
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private readonly string testRichTextBoxText = "The quick brown fox jumps over the lazy dog";
+		private DispatcherTimer dispatcherTimer;
+		private int secondsElapsed;
+		private readonly string testRichTextBoxText = "Water is a transparent, tasteless, odorless, and nearly colorless chemical substance, which is the main constituent of Earth's streams, lakes, and oceans, and the fluids of most living organisms. It is vital for all known forms of life, even though it provides no calories or organic nutrients. It forms precipitation in the form of rain and aerosols in the form of fog. Clouds are formed from suspended droplets of water and ice, its solid state. When finely divided, crystalline ice may precipitate in the form of snow. The gaseous state of water is steam or water vapor. Water moves continually through the water cycle of evaporation, transpiration, condensation, precipitation, and runoff, usually reaching the sea";
 		private string[] words;
 		private string currentWord = "";
 		private int currentIndex = 0;
 		public MainWindow()
 		{
 			InitializeComponent();
-			type.Focus();
+			testRichTextBox.IsEnabled = false;
+			typeTextBox.IsReadOnly = true;
+		}
+
+		private void StartButton_Click(object sender, RoutedEventArgs e)
+		{
+			typeTextBox.IsReadOnly = false;
 			Init();
+			typeTextBox.Focus();
+			StartButton.IsEnabled = false;
 		}
 
 		private void Init()
@@ -39,6 +50,20 @@ namespace SpeedTester
 			paragraph.Inlines.Add(testRichTextBoxText);
 			words = testRichTextBoxText.Split(' ');
 			currentWord = words.First();
+
+			secondsElapsed = 0;
+			dispatcherTimer = new DispatcherTimer();
+			dispatcherTimer.Tick += DispatcherTimer_Tick;
+			dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+			dispatcherTimer.Start();
+		}
+
+		private void DispatcherTimer_Tick(object sender, EventArgs e)
+		{
+			secondsElapsed++;
+			TimeSpan time = TimeSpan.FromSeconds(secondsElapsed);
+
+			TimerLabel.Content = time.ToString(@"hh\:mm\:ss");
 		}
 
 		private string GetNextWord()
@@ -160,13 +185,22 @@ namespace SpeedTester
 
 			if (currentIndex >= words.Length - 1)
 			{
-				MessageBox.Show("Typing test over!");
-				currentIndex = -1;
+				Stop();
 			}
 
 			currentWord = words[currentIndex + 1];
 			currentIndex++;
-			
+		}
+
+		private void Stop()
+		{
+			dispatcherTimer.Stop();
+			dispatcherTimer.Tick -= DispatcherTimer_Tick;
+			double typingSpeed = words.Length * 60 / secondsElapsed;
+			MessageBox.Show("Typing test over, your speed is: " + typingSpeed + " wpm", "Test over!");
+			currentIndex = -1;
+			StartButton.IsEnabled = true;
+			typeTextBox.IsEnabled = false;
 		}
 	}
 }
