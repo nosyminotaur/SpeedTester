@@ -24,7 +24,7 @@ namespace SpeedTester
 	{
 		private DispatcherTimer dispatcherTimer;
 		private int secondsElapsed;
-		private readonly string testRichTextBoxText = "Water is a transparent, tasteless, odorless, and nearly colorless chemical substance, which is the main constituent of Earth's streams, lakes, and oceans, and the fluids of most living organisms. It is vital for all known forms of life, even though it provides no calories or organic nutrients. It forms precipitation in the form of rain and aerosols in the form of fog. Clouds are formed from suspended droplets of water and ice, its solid state. When finely divided, crystalline ice may precipitate in the form of snow. The gaseous state of water is steam or water vapor. Water moves continually through the water cycle of evaporation, transpiration, condensation, precipitation, and runoff, usually reaching the sea";
+		private readonly string testRichTextBoxText = "Water is a transparent, tasteless, odorless, and nearly colorless chemical substance, which is the main constituent of Earth's streams, lakes, and oceans, and the fluids of most living organisms. It is vital for all known forms of life, even though it provides no calories or organic nutrients. It forms precipitation in the form of rain and aerosols in the form of fog. When finely divided, crystalline ice may precipitate in the form of snow. Water moves continually through the water cycle of evaporation, transpiration, condensation, precipitation, and runoff, usually reaching the sea.";
 		private string[] words;
 		private string currentWord = "";
 		private int currentIndex = 0;
@@ -46,8 +46,12 @@ namespace SpeedTester
 		private void Init()
 		{
 			Paragraph paragraph = new Paragraph();
+			paragraph.TextAlignment = TextAlignment.Justify;
+			paragraph.Foreground = new SolidColorBrush(Colors.White);
+			paragraph.FontStyle = FontStyles.Normal;
+			Run run = new Run(testRichTextBoxText);
+			paragraph.Inlines.Add(run);
 			testRichTextBox.Document = new FlowDocument(paragraph);
-			paragraph.Inlines.Add(testRichTextBoxText);
 			words = testRichTextBoxText.Split(' ');
 			currentWord = words.First();
 
@@ -102,7 +106,9 @@ namespace SpeedTester
 			//Highlight the entire word and color the specific portion of word
 			FlowDocument flowDocument = new FlowDocument();
 			Paragraph pr = new Paragraph();
-
+			pr.TextAlignment = TextAlignment.Justify;
+			pr.Foreground = new SolidColorBrush(Colors.White);
+			pr.FontStyle = FontStyles.Normal;
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < currentIndex; i++)
 			{

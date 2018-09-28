@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SpeedTester"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Speed Tester" Height="500" Width="800">
     <Grid>
         <StackPanel Orientation= "Vertical">
-            <RichTextBox Name="testRichTextBox" FontSize="20" Margin="10 10 10 10"/>
-            <TextBox Name="typeTextBox" TextChanged="type_TextChanged" FontSize="20" Margin="10 10 10 10"/>
+            <RichTextBox Name="testRichTextBox" FontSize="20" Margin="10" Background="Black"/>
+            <TextBox Name="typeTextBox" TextChanged="type_TextChanged" FontSize="20" Margin="10"/>
             <Button Name="StartButton" Margin="50" Width="150" Click="StartButton_Click" FontSize="20">
                 Start the Test!
             </Button>
